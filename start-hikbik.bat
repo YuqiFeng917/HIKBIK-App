@@ -1,0 +1,13 @@
+@echo off
+echo 正在启动HIKBIK应用...
+echo.
+echo 设置Android环境变量...
+set ANDROID_HOME=C:\Users\lenovo\AppData\Local\Android\Sdk
+set PATH=%PATH%;%ANDROID_HOME%\platform-tools;%ANDROID_HOME%\emulator
+echo.
+echo 启动Expo开发服务器...
+cd /d "C:\Users\lenovo\Desktop\HIKBIK"
+npx expo start --android
+echo.
+echo 按任意键关闭此窗口...
+pause > nul

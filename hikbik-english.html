@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HIKBIK - Outdoor Camping & Hiking App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 414px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .nav-tab {
+            flex: 1;
+            padding: 15px 10px;
+            text-align: center;
+            background: none;
+            border: none;
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-tab.active {
+            color: #4CAF50;
+            background: white;
+            border-bottom: 2px solid #4CAF50;
+        }
+        
+        .content {
+            padding: 20px;
+            min-height: calc(100vh - 200px);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .search-bar {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .search-bar:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .action-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .action-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .action-card h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        
+        .action-card p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .campsite-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .campsite-item:hover {
+            transform: translateY(-2px);
+        }
+        
+        .campsite-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .campsite-location {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .campsite-rating {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .stars {
+            color: #ffc107;
+            margin-right: 5px;
+        }
+        
+        .campsite-price {
+            font-size: 16px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        
+        .map-container {
+            width: 100%;
+            height: 300px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .equipment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        
+        .equipment-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #e9ecef;
+        }
+        
+        .equipment-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #c3e6cb;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                max-width: 100%;
+            }
+            
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+            
+            .equipment-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🏕️ HIKBIK</h1>
+            <p>Outdoor Camping & Hiking Assistant</p>
+        </div>
+        
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('home')">🏠 Home</button>
+            <button class="nav-tab" onclick="switchTab('campsites')">🏕️ Campsites</button>
+            <button class="nav-tab" onclick="switchTab('routes')">🗺️ Routes</button>
+            <button class="nav-tab" onclick="switchTab('equipment')">🎒 Gear</button>
+        </div>
+        
+        <!-- Content Area -->
+        <div class="content">
+            <!-- Home Tab -->
+            <div id="home" class="tab-content active">
+                <input type="text" class="search-bar" placeholder="Search campsites, routes, or gear...">
+                
+                <div class="quick-actions">
+                    <div class="action-card" onclick="switchTab('campsites')">
+                        <h3>🏕️ Find Campsites</h3>
+                        <p>Discover nearby camping spots</p>
+                    </div>
+                    <div class="action-card" onclick="switchTab('routes')">
+                        <h3>🗺️ Plan Routes</h3>
+                        <p>Create perfect hiking trails</p>
+                    </div>
+                    <div class="action-card" onclick="switchTab('equipment')">
+                        <h3>🎒 Gear Checklist</h3>
+                        <p>Prepare outdoor adventure gear</p>
+                    </div>
+                    <div class="action-card" onclick="showCommunity()">
+                        <h3>👥 Community</h3>
+                        <p>Connect with outdoor enthusiasts</p>
+                    </div>
+                </div>
+                
+                <h2 class="section-title">🌟 Featured Campsites</h2>
+                <div id="featured-campsites">
+                    <!-- Featured campsites will be loaded here -->
+                </div>
+            </div>
+            
+            <!-- Campsites Tab -->
+            <div id="campsites" class="tab-content">
+                <input type="text" class="search-bar" placeholder="Search campsites...">
+                
+                <div class="map-container">
+                    <div id="map"></div>
+                </div>
+                
+                <h2 class="section-title">🏕️ Nearby Campsites</h2>
+                <div id="campsites-list">
+                    <!-- Campsites list will be loaded here -->
+                </div>
+            </div>
+            
+            <!-- Routes Tab -->
+            <div id="routes" class="tab-content">
+                <input type="text" class="search-bar" placeholder="Search hiking routes...">
+                
+                <h2 class="section-title">🗺️ Popular Routes</h2>
+                <div id="routes-list">
+                    <!-- Routes list will be loaded here -->
+                </div>
+            </div>
+            
+            <!-- Equipment Tab -->
+            <div id="equipment" class="tab-content">
+                <input type="text" class="search-bar" placeholder="Search outdoor gear...">
+                
+                <h2 class="section-title">🎒 Essential Gear</h2>
+                <div class="equipment-grid" id="equipment-grid">
+                    <!-- Equipment list will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock data
+        const mockCampsites = [
+            {
+                id: 1,
+                name: "Mountain Peak Camp",
+                location: "Rocky Mountains, Colorado",
+                rating: 4.8,
+                price: "$45/night",
+                amenities: ["Water", "Electricity", "WiFi", "Restrooms"]
+            },
+            {
+                id: 2,
+                name: "Lakeside Retreat",
+                location: "Lake Tahoe, California",
+                rating: 4.6,
+                price: "$35/night",
+                amenities: ["Water", "Restrooms", "Fishing"]
+            },
+            {
+                id: 3,
+                name: "Forest Haven",
+                location: "Yellowstone National Park, Wyoming",
+                rating: 4.9,
+                price: "$25/night",
+                amenities: ["Water", "Restrooms", "Hiking Trails"]
+            }
+        ];
+        
+        const mockRoutes = [
+            {
+                id: 1,
+                name: "Lakeshore Loop",
+                distance: "8.5 km",
+                difficulty: "Moderate",
+                duration: "3 hours",
+                elevation: "+200m"
+            },
+            {
+                id: 2,
+                name: "Summit Challenge",
+                distance: "12 km",
+                difficulty: "Hard",
+                duration: "6 hours",
+                elevation: "+800m"
+            },
+            {
+                id: 3,
+                name: "Forest Walk",
+                distance: "5 km",
+                difficulty: "Easy",
+                duration: "2 hours",
+                elevation: "+50m"
+            }
+        ];
+        
+        const mockEquipment = [
+            { name: "Tent", icon: "⛺", category: "Shelter" },
+            { name: "Sleeping Bag", icon: "🛌", category: "Sleep" },
+            { name: "Backpack", icon: "🎒", category: "Carry" },
+            { name: "Hiking Boots", icon: "🥾", category: "Footwear" },
+            { name: "Headlamp", icon: "🔦", category: "Lighting" },
+            { name: "Water Bottle", icon: "🥤", category: "Hydration" },
+            { name: "First Aid Kit", icon: "🏥", category: "Safety" },
+            { name: "Map", icon: "🗺️", category: "Navigation" }
+        ];
+        
+        // Tab switching functionality
+        function switchTab(tabName) {
+            // Hide all content
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active state from all tabs
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Activate corresponding tab
+            event.target.classList.add('active');
+            
+            // Load content based on tab
+            if (tabName === 'campsites') {
+                loadCampsites();
+                initMap();
+            } else if (tabName === 'routes') {
+                loadRoutes();
+            } else if (tabName === 'equipment') {
+                loadEquipment();
+            } else if (tabName === 'home') {
+                loadFeaturedCampsites();
+            }
+        }
+        
+        // Load featured campsites
+        function loadFeaturedCampsites() {
+            const container = document.getElementById('featured-campsites');
+            container.innerHTML = '';
+            
+            mockCampsites.slice(0, 2).forEach(campsite => {
+                const item = createCampsiteElement(campsite);
+                container.appendChild(item);
+            });
+        }
+        
+        // Load campsites list
+        function loadCampsites() {
+            const container = document.getElementById('campsites-list');
+            container.innerHTML = '';
+            
+            mockCampsites.forEach(campsite => {
+                const item = createCampsiteElement(campsite);
+                container.appendChild(item);
+            });
+        }
+        
+        // Create campsite element
+        function createCampsiteElement(campsite) {
+            const div = document.createElement('div');
+            div.className = 'campsite-item';
+            div.innerHTML = `
+                <div class="campsite-name">${campsite.name}</div>
+                <div class="campsite-location">📍 ${campsite.location}</div>
+                <div class="campsite-rating">
+                    <span class="stars">${'★'.repeat(Math.floor(campsite.rating))}</span>
+                    <span>${campsite.rating}</span>
+                </div>
+                <div class="campsite-price">${campsite.price}</div>
+                <div style="margin-top: 10px;">
+                    ${campsite.amenities.map(amenity => `<span style="background: #e9ecef; padding: 2px 8px; border-radius: 12px; font-size: 12px; margin-right: 5px;">${amenity}</span>`).join('')}
+                </div>
+            `;
+            return div;
+        }
+        
+        // Load routes list
+        function loadRoutes() {
+            const container = document.getElementById('routes-list');
+            container.innerHTML = '';
+            
+            mockRoutes.forEach(route => {
+                const div = document.createElement('div');
+                div.className = 'campsite-item';
+                div.innerHTML = `
+                    <div class="campsite-name">${route.name}</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+                        <div><strong>Distance:</strong> ${route.distance}</div>
+                        <div><strong>Difficulty:</strong> ${route.difficulty}</div>
+                        <div><strong>Duration:</strong> ${route.duration}</div>
+                        <div><strong>Elevation:</strong> ${route.elevation}</div>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+        
+        // Load equipment list
+        function loadEquipment() {
+            const container = document.getElementById('equipment-grid');
+            container.innerHTML = '';
+            
+            mockEquipment.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'equipment-item';
+                div.innerHTML = `
+                    <div class="equipment-icon">${item.icon}</div>
+                    <div style="font-weight: bold; margin-bottom: 5px;">${item.name}</div>
+                    <div style="font-size: 12px; color: #666;">${item.category}</div>
+                `;
+                container.appendChild(div);
+            });
+        }
+        
+        // Initialize map
+        function initMap() {
+            const mapContainer = document.getElementById('map');
+            if (!mapContainer) return;
+            
+            // Show map loading state
+            mapContainer.innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: #f8f9fa; color: #666;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 24px; margin-bottom: 10px;">🗺️</div>
+                        <div>Loading map...</div>
+                        <div style="font-size: 12px; margin-top: 5px;">Google Maps API key required</div>
+                    </div>
+                </div>
+            `;
+            
+            // Google Maps integration would go here
+            // Requires API key to display real map
+        }
+        
+        // Show community feature
+        function showCommunity() {
+            alert('Community feature coming soon!\n\nThis will include:\n- User sharing\n- Experience exchange\n- Event organization');
+        }
+        
+        // Search functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchBars = document.querySelectorAll('.search-bar');
+            searchBars.forEach(bar => {
+                bar.addEventListener('input', function(e) {
+                    const query = e.target.value.toLowerCase();
+                    // Search logic would go here
+                    console.log('Searching for:', query);
+                });
+            });
+            
+            // Initialize home content
+            loadFeaturedCampsites();
+        });
+        
+        // Add interactive effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click effects to all clickable elements
+            const clickableElements = document.querySelectorAll('.action-card, .campsite-item, .equipment-item');
+            clickableElements.forEach(element => {
+                element.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

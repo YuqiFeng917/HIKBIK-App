@@ -1,0 +1,15 @@
+module.exports = {
+  root: true,
+  extends: '@react-native',
+  rules: {
+    'react-native/no-inline-styles': 'off',
+    'react-hooks/exhaustive-deps': 'off',
+    'no-unused-vars': 'warn',
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto',
+      },
+    ],
+  },
+};

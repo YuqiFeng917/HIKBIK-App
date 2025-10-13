@@ -1,0 +1,50 @@
+{
+  "expo": {
+    "name": "HIKBIK",
+    "slug": "hikbik",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./HIKBIK/assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./HIKBIK/assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "config": {
+        "googleMapsApiKey": "AIzaSyDI33J64VFPhSque-J6jsSpK6440QBSeTs"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./HIKBIK/assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDI33J64VFPhSque-J6jsSpK6440QBSeTs"
+        }
+      }
+    },
+    "web": {
+      "favicon": "./HIKBIK/assets/favicon.png"
+    },
+    "platforms": ["ios", "android", "web"],
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow HIKBIK to use your location for finding nearby campsites and planning routes."
+        }
+      ]
+    ],
+    "extra": {
+      "googleMapsApiKey": "AIzaSyDI33J64VFPhSque-J6jsSpK6440QBSeTs"
+    }
+  }
+}

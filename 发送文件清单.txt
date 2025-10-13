@@ -1,0 +1,37 @@
+HIKBIK应用发送文件清单
+====================
+
+📦 需要发送的文件：
+
+1. 主要应用文件：
+   ✅ hikbik-standalone.html (中文版)
+   ✅ hikbik-english.html (英文版)
+
+2. 使用说明文件：
+   ✅ iOS_QUICK_START.md (中文使用指南)
+   ✅ SEND_GUIDE_ENGLISH.md (英文发送指南)
+
+3. 测试文件（可选）：
+   ✅ map-test.html (Google Maps测试)
+
+📱 发送建议：
+- 中文朋友：发送 hikbik-standalone.html + iOS_QUICK_START.md
+- 国际朋友：发送 hikbik-english.html + SEND_GUIDE_ENGLISH.md
+
+🌐 发送方式：
+1. 邮件发送（推荐）
+2. 微信/QQ发送
+3. 云存储分享
+4. AirDrop（苹果设备）
+
+📋 朋友使用步骤：
+1. 下载HTML文件
+2. 在iPhone Safari中打开
+3. 添加到主屏幕
+4. 开始使用HIKBIK应用
+
+💡 注意事项：
+- 文件很小，发送很快
+- 无需安装任何软件
+- 直接在浏览器中运行
+- 完美适配iPhone屏幕

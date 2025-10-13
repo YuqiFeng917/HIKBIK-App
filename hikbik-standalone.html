@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HIKBIK - 户外露营应用</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 414px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .nav-tab {
+            flex: 1;
+            padding: 15px 10px;
+            text-align: center;
+            background: none;
+            border: none;
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-tab.active {
+            color: #4CAF50;
+            background: white;
+            border-bottom: 2px solid #4CAF50;
+        }
+        
+        .content {
+            padding: 20px;
+            min-height: calc(100vh - 200px);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .search-bar {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .search-bar:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .action-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .action-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .action-card h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        
+        .action-card p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .campsite-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .campsite-item:hover {
+            transform: translateY(-2px);
+        }
+        
+        .campsite-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .campsite-location {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .campsite-rating {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .stars {
+            color: #ffc107;
+            margin-right: 5px;
+        }
+        
+        .campsite-price {
+            font-size: 16px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        
+        .map-container {
+            width: 100%;
+            height: 300px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .equipment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        
+        .equipment-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #e9ecef;
+        }
+        
+        .equipment-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #c3e6cb;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                max-width: 100%;
+            }
+            
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+            
+            .equipment-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <h1>🏕️ HIKBIK</h1>
+            <p>户外露营和徒步旅行助手</p>
+        </div>
+        
+        <!-- 导航标签 -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('home')">🏠 首页</button>
+            <button class="nav-tab" onclick="switchTab('campsites')">🏕️ 营地</button>
+            <button class="nav-tab" onclick="switchTab('routes')">🗺️ 路线</button>
+            <button class="nav-tab" onclick="switchTab('equipment')">🎒 装备</button>
+        </div>
+        
+        <!-- 内容区域 -->
+        <div class="content">
+            <!-- 首页 -->
+            <div id="home" class="tab-content active">
+                <input type="text" class="search-bar" placeholder="搜索营地、路线或装备...">
+                
+                <div class="quick-actions">
+                    <div class="action-card" onclick="switchTab('campsites')">
+                        <h3>🏕️ 发现营地</h3>
+                        <p>寻找附近的露营地点</p>
+                    </div>
+                    <div class="action-card" onclick="switchTab('routes')">
+                        <h3>🗺️ 规划路线</h3>
+                        <p>制定完美的徒步路线</p>
+                    </div>
+                    <div class="action-card" onclick="switchTab('equipment')">
+                        <h3>🎒 装备清单</h3>
+                        <p>准备户外探险装备</p>
+                    </div>
+                    <div class="action-card" onclick="showCommunity()">
+                        <h3>👥 社区</h3>
+                        <p>与其他户外爱好者交流</p>
+                    </div>
+                </div>
+                
+                <h2 class="section-title">🌟 推荐营地</h2>
+                <div id="featured-campsites">
+                    <!-- 推荐营地将在这里动态加载 -->
+                </div>
+            </div>
+            
+            <!-- 营地页面 -->
+            <div id="campsites" class="tab-content">
+                <input type="text" class="search-bar" placeholder="搜索营地...">
+                
+                <div class="map-container">
+                    <div id="map"></div>
+                </div>
+                
+                <h2 class="section-title">🏕️ 附近营地</h2>
+                <div id="campsites-list">
+                    <!-- 营地列表将在这里动态加载 -->
+                </div>
+            </div>
+            
+            <!-- 路线页面 -->
+            <div id="routes" class="tab-content">
+                <input type="text" class="search-bar" placeholder="搜索路线...">
+                
+                <h2 class="section-title">🗺️ 热门路线</h2>
+                <div id="routes-list">
+                    <!-- 路线列表将在这里动态加载 -->
+                </div>
+            </div>
+            
+            <!-- 装备页面 -->
+            <div id="equipment" class="tab-content">
+                <input type="text" class="search-bar" placeholder="搜索装备...">
+                
+                <h2 class="section-title">🎒 装备清单</h2>
+                <div class="equipment-grid" id="equipment-grid">
+                    <!-- 装备列表将在这里动态加载 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 模拟数据
+        const mockCampsites = [
+            {
+                id: 1,
+                name: "山峰营地",
+                location: "落基山脉, 科罗拉多州",
+                rating: 4.8,
+                price: "$45/晚",
+                amenities: ["水源", "电力", "WiFi", "卫生间"]
+            },
+            {
+                id: 2,
+                name: "湖畔营地",
+                location: "太浩湖, 加利福尼亚州",
+                rating: 4.6,
+                price: "$35/晚",
+                amenities: ["水源", "卫生间", "钓鱼"]
+            },
+            {
+                id: 3,
+                name: "森林营地",
+                location: "黄石国家公园, 怀俄明州",
+                rating: 4.9,
+                price: "$25/晚",
+                amenities: ["水源", "卫生间", "徒步小径"]
+            }
+        ];
+        
+        const mockRoutes = [
+            {
+                id: 1,
+                name: "环湖徒步",
+                distance: "8.5公里",
+                difficulty: "中等",
+                duration: "3小时",
+                elevation: "+200米"
+            },
+            {
+                id: 2,
+                name: "山顶挑战",
+                distance: "12公里",
+                difficulty: "困难",
+                duration: "6小时",
+                elevation: "+800米"
+            },
+            {
+                id: 3,
+                name: "森林漫步",
+                distance: "5公里",
+                difficulty: "简单",
+                duration: "2小时",
+                elevation: "+50米"
+            }
+        ];
+        
+        const mockEquipment = [
+            { name: "帐篷", icon: "⛺", category: "住宿" },
+            { name: "睡袋", icon: "🛌", category: "住宿" },
+            { name: "背包", icon: "🎒", category: "携带" },
+            { name: "登山杖", icon: "🥾", category: "工具" },
+            { name: "头灯", icon: "🔦", category: "照明" },
+            { name: "水壶", icon: "🥤", category: "饮水" },
+            { name: "急救包", icon: "🏥", category: "安全" },
+            { name: "地图", icon: "🗺️", category: "导航" }
+        ];
+        
+        // 标签切换功能
+        function switchTab(tabName) {
+            // 隐藏所有内容
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // 移除所有标签的active状态
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // 显示选中的内容
+            document.getElementById(tabName).classList.add('active');
+            
+            // 激活对应的标签
+            event.target.classList.add('active');
+            
+            // 根据标签加载对应内容
+            if (tabName === 'campsites') {
+                loadCampsites();
+                initMap();
+            } else if (tabName === 'routes') {
+                loadRoutes();
+            } else if (tabName === 'equipment') {
+                loadEquipment();
+            } else if (tabName === 'home') {
+                loadFeaturedCampsites();
+            }
+        }
+        
+        // 加载推荐营地
+        function loadFeaturedCampsites() {
+            const container = document.getElementById('featured-campsites');
+            container.innerHTML = '';
+            
+            mockCampsites.slice(0, 2).forEach(campsite => {
+                const item = createCampsiteElement(campsite);
+                container.appendChild(item);
+            });
+        }
+        
+        // 加载营地列表
+        function loadCampsites() {
+            const container = document.getElementById('campsites-list');
+            container.innerHTML = '';
+            
+            mockCampsites.forEach(campsite => {
+                const item = createCampsiteElement(campsite);
+                container.appendChild(item);
+            });
+        }
+        
+        // 创建营地元素
+        function createCampsiteElement(campsite) {
+            const div = document.createElement('div');
+            div.className = 'campsite-item';
+            div.innerHTML = `
+                <div class="campsite-name">${campsite.name}</div>
+                <div class="campsite-location">📍 ${campsite.location}</div>
+                <div class="campsite-rating">
+                    <span class="stars">${'★'.repeat(Math.floor(campsite.rating))}</span>
+                    <span>${campsite.rating}</span>
+                </div>
+                <div class="campsite-price">${campsite.price}</div>
+                <div style="margin-top: 10px;">
+                    ${campsite.amenities.map(amenity => `<span style="background: #e9ecef; padding: 2px 8px; border-radius: 12px; font-size: 12px; margin-right: 5px;">${amenity}</span>`).join('')}
+                </div>
+            `;
+            return div;
+        }
+        
+        // 加载路线列表
+        function loadRoutes() {
+            const container = document.getElementById('routes-list');
+            container.innerHTML = '';
+            
+            mockRoutes.forEach(route => {
+                const div = document.createElement('div');
+                div.className = 'campsite-item';
+                div.innerHTML = `
+                    <div class="campsite-name">${route.name}</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+                        <div><strong>距离:</strong> ${route.distance}</div>
+                        <div><strong>难度:</strong> ${route.difficulty}</div>
+                        <div><strong>时长:</strong> ${route.duration}</div>
+                        <div><strong>爬升:</strong> ${route.elevation}</div>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+        
+        // 加载装备列表
+        function loadEquipment() {
+            const container = document.getElementById('equipment-grid');
+            container.innerHTML = '';
+            
+            mockEquipment.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'equipment-item';
+                div.innerHTML = `
+                    <div class="equipment-icon">${item.icon}</div>
+                    <div style="font-weight: bold; margin-bottom: 5px;">${item.name}</div>
+                    <div style="font-size: 12px; color: #666;">${item.category}</div>
+                `;
+                container.appendChild(div);
+            });
+        }
+        
+        // 初始化地图
+        function initMap() {
+            const mapContainer = document.getElementById('map');
+            if (!mapContainer) return;
+            
+            // 显示地图加载状态
+            mapContainer.innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: #f8f9fa; color: #666;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 24px; margin-bottom: 10px;">🗺️</div>
+                        <div>地图加载中...</div>
+                        <div style="font-size: 12px; margin-top: 5px;">需要配置Google Maps API密钥</div>
+                    </div>
+                </div>
+            `;
+            
+            // 这里可以集成Google Maps API
+            // 需要API密钥才能显示真实地图
+        }
+        
+        // 显示社区功能
+        function showCommunity() {
+            alert('社区功能正在开发中...\n\n这里将包含:\n- 用户分享\n- 经验交流\n- 活动组织');
+        }
+        
+        // 搜索功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchBars = document.querySelectorAll('.search-bar');
+            searchBars.forEach(bar => {
+                bar.addEventListener('input', function(e) {
+                    const query = e.target.value.toLowerCase();
+                    // 这里可以实现搜索逻辑
+                    console.log('搜索:', query);
+                });
+            });
+            
+            // 初始化首页内容
+            loadFeaturedCampsites();
+        });
+        
+        // 添加一些交互效果
+        document.addEventListener('DOMContentLoaded', function() {
+            // 为所有可点击元素添加点击效果
+            const clickableElements = document.querySelectorAll('.action-card, .campsite-item, .equipment-item');
+            clickableElements.forEach(element => {
+                element.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
