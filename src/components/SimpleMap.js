@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
-import { WebView } from 'react-native-webview';
+import { View, StyleSheet, Text, TouchableOpacity, Alert, Platform } from 'react-native';
+// Web兼容性：条件导入WebView
+let WebView;
+if (Platform.OS !== 'web') {
+  try {
+    WebView = require('react-native-webview').default;
+  } catch (error) {
+    console.log('react-native-webview not available:', error.message);
+  }
+}
 
 const SimpleMap = () => {
   const [mapHtml, setMapHtml] = useState('');
@@ -115,6 +123,36 @@ const SimpleMap = () => {
     setMapHtml(html);
   };
 
+  // Web平台显示简化地图
+  if (Platform.OS === 'web') {
+    return (
+      <View style={styles.container}>
+        <View style={styles.webMapPlaceholder}>
+          <Text style={styles.webMapTitle}>🗺️ HIKBIK 地图</Text>
+          <Text style={styles.webMapSubtitle}>营地位置概览</Text>
+          <View style={styles.mapGrid}>
+            <View style={styles.mapPoint}>
+              <Text style={styles.mapPointText}>📍</Text>
+              <Text style={styles.mapPointLabel}>Mountain Peak Camp</Text>
+            </View>
+            <View style={styles.mapPoint}>
+              <Text style={styles.mapPointText}>📍</Text>
+              <Text style={styles.mapPointLabel}>Lakeside Retreat</Text>
+            </View>
+            <View style={styles.mapPoint}>
+              <Text style={styles.mapPointText}>📍</Text>
+              <Text style={styles.mapPointLabel}>Forest Haven</Text>
+            </View>
+            <View style={styles.mapPoint}>
+              <Text style={styles.mapPointText}>📍</Text>
+              <Text style={styles.mapPointLabel}>Desert Oasis</Text>
+            </View>
+          </View>
+        </View>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       {mapHtml ? (
@@ -160,6 +198,50 @@ const styles = StyleSheet.create({
   loadingText: {
     fontSize: 16,
     color: '#666',
+  },
+  // Web版本样式
+  webMapPlaceholder: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#E8F5E8',
+    borderRadius: 12,
+    padding: 20,
+  },
+  webMapTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#2E7D32',
+    marginBottom: 8,
+  },
+  webMapSubtitle: {
+    fontSize: 16,
+    color: '#4CAF50',
+    marginBottom: 20,
+  },
+  mapGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  mapPoint: {
+    alignItems: 'center',
+    margin: 10,
+    padding: 10,
+    backgroundColor: 'white',
+    borderRadius: 8,
+    minWidth: 120,
+  },
+  mapPointText: {
+    fontSize: 24,
+    marginBottom: 4,
+  },
+  mapPointLabel: {
+    fontSize: 12,
+    color: '#333',
+    textAlign: 'center',
+    fontWeight: '500',
   },
 });
 

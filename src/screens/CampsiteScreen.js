@@ -8,8 +8,19 @@ import {
   Image,
   TextInput,
   Dimensions,
+  Platform,
 } from 'react-native';
-import MapView, {Marker} from 'react-native-maps';
+// Web兼容性：条件导入react-native-maps
+let MapView, Marker;
+if (Platform.OS !== 'web') {
+  try {
+    const Maps = require('react-native-maps');
+    MapView = Maps.default;
+    Marker = Maps.Marker;
+  } catch (error) {
+    console.log('react-native-maps not available:', error.message);
+  }
+}
 import * as Location from 'expo-location';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import SimpleMap from '../components/SimpleMap';

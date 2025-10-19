@@ -4,7 +4,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-// 导入各个功能模块
+// Import all functional modules
 import HomeScreen from './src/screens/HomeScreen';
 import CampsiteScreen from './src/screens/CampsiteScreen';
 import EquipmentScreen from './src/screens/EquipmentScreen';
@@ -12,11 +12,12 @@ import CommunityScreen from './src/screens/CommunityScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import RoutePlanningScreen from './src/screens/RoutePlanningScreen';
 import ActivityTrackingScreen from './src/screens/ActivityTrackingScreen';
+import FontLoader from './src/components/FontLoader';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-// 主标签导航
+// Main tab navigator
 function MainTabNavigator() {
   return (
     <Tab.Navigator
@@ -59,27 +60,29 @@ function MainTabNavigator() {
   );
 }
 
-// 主应用导航
+// Main app navigator
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen 
-          name="MainTabs" 
-          component={MainTabNavigator} 
-          options={{headerShown: false}}
-        />
-        <Stack.Screen 
-          name="RoutePlanning" 
-          component={RoutePlanningScreen}
-          options={{title: 'Route Planning'}}
-        />
-        <Stack.Screen 
-          name="ActivityTracking" 
-          component={ActivityTrackingScreen}
-          options={{title: 'Activity Tracking'}}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <FontLoader>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen 
+            name="MainTabs" 
+            component={MainTabNavigator} 
+            options={{headerShown: false}}
+          />
+          <Stack.Screen 
+            name="RoutePlanning" 
+            component={RoutePlanningScreen}
+            options={{title: 'Route Planning'}}
+          />
+          <Stack.Screen 
+            name="ActivityTracking" 
+            component={ActivityTrackingScreen}
+            options={{title: 'Activity Tracking'}}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </FontLoader>
   );
 }

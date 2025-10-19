@@ -41,7 +41,18 @@
         {
           "locationAlwaysAndWhenInUsePermission": "Allow HIKBIK to use your location for finding nearby campsites and planning routes."
         }
-      ]
+      ],
+      "expo-font"
+    ],
+    "fonts": [
+      "./assets/fonts/Montserrat-Regular.ttf",
+      "./assets/fonts/Montserrat-Bold.ttf",
+      "./assets/fonts/Montserrat-Light.ttf",
+      "./assets/fonts/Montserrat-Medium.ttf",
+      "./assets/fonts/merriweather/static/Merriweather_24pt-Regular.ttf",
+      "./assets/fonts/merriweather/static/Merriweather_24pt-Bold.ttf",
+      "./assets/fonts/merriweather/static/Merriweather_24pt-Light.ttf",
+      "./assets/fonts/merriweather/static/Merriweather_24pt-Italic.ttf"
     ],
     "extra": {
       "googleMapsApiKey": "AIzaSyDI33J64VFPhSque-J6jsSpK6440QBSeTs"
