@@ -2,17 +2,38 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
+import {Platform, View, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 // Import all functional modules
 import HomeScreen from './src/screens/HomeScreen';
-import CampsiteScreen from './src/screens/CampsiteScreen';
 import EquipmentScreen from './src/screens/EquipmentScreen';
 import CommunityScreen from './src/screens/CommunityScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import RoutePlanningScreen from './src/screens/RoutePlanningScreen';
 import ActivityTrackingScreen from './src/screens/ActivityTrackingScreen';
 import FontLoader from './src/components/FontLoader';
+
+// Web兼容性：条件导入CampsiteScreen
+let CampsiteScreen;
+if (Platform.OS !== 'web') {
+  CampsiteScreen = require('./src/screens/CampsiteScreen').default;
+} else {
+  // Web版本使用简化的营地屏幕
+  CampsiteScreen = () => (
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F5F5F5'}}>
+      <Text style={{fontSize: 24, color: '#2E7D32', textAlign: 'center'}}>
+        🏕️ 营地功能
+      </Text>
+      <Text style={{fontSize: 16, color: '#666', textAlign: 'center', marginTop: 10}}>
+        地图功能暂时不可用
+      </Text>
+      <Text style={{fontSize: 14, color: '#999', textAlign: 'center', marginTop: 20}}>
+        请在移动设备上查看完整功能
+      </Text>
+    </View>
+  );
+}
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();

@@ -10,17 +10,12 @@ import {
   Dimensions,
   Platform,
 } from 'react-native';
-// Web兼容性：条件导入react-native-maps
-let MapView, Marker;
-if (Platform.OS !== 'web') {
-  try {
-    const Maps = require('react-native-maps');
-    MapView = Maps.default;
-    Marker = Maps.Marker;
-  } catch (error) {
-    console.log('react-native-maps not available:', error.message);
-  }
-}
+
+// 暂时禁用地图功能 - 所有平台都使用SimpleMap
+// let MapView, Marker;
+// MapView = () => null;
+// Marker = () => null;
+
 import * as Location from 'expo-location';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import SimpleMap from '../components/SimpleMap';
